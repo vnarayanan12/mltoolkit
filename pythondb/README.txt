@@ -1,0 +1,1 @@
+"C:\Users\vijin\kubesamples\mltoolkit\pythondb\ingestDataInMongoDBFromFolder.py" runs directly from Spyder in Mondo DB running as a server locally
