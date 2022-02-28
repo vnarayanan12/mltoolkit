@@ -1,0 +1,9 @@
+.toolbar {
+    width: 100vw;
+    height: 5vh;
+    position: relative;
+}
+
+.content {
+    padding: 5vw;
+}

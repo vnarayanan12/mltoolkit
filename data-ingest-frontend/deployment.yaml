@@ -1,0 +1,22 @@
+
+apiVersion: apps/v1 # Kubernetes API version
+kind: Deployment  # Kubernetes resource kind we are creating
+metadata:
+  name: data-ingest-frontend
+  namespace: ml-toolkit
+spec:
+  selector:
+    matchLabels:
+      app: data-ingest-frontend
+  replicas: 2 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: data-ingest-frontend
+    spec:
+      containers:
+      - name: data-ingest-frontend
+        image: gbrown97/data-ingest-frontend:1.0 # Image that will be used to containers in the cluster
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80 # The port that the container is running on in the cluster

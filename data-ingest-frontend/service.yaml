@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-ingest-frontend-service
+  namespace: ml-toolkit
+spec:
+  selector:
+    app: data-ingest-frontend
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
