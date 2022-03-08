@@ -1,7 +1,8 @@
+cd mltookkit/KubeMongoDbPython
 docker build -t kube-mongodb:1.0.0 .
 Now we can easily use the official mongo Docker image and run it on the same network as the app container.
 Run these commands
-docker tag and push
+docker tag and push vnarayanan/kube-mongodb:1.0.0 
 >docker network create mltoolkit-net
 >docker run --name=mongo --rm -d --network=mltoolkit-net mongo
 >docker run –-name=kubemongo --rm -p 5000:5000 -d –-network=mltoolkit-net vnarayanan/kube-mongodb:1.0.0
@@ -27,6 +28,10 @@ but not from outside. The only resource that should have access to the MongoDB d
 Here, the port 27017 of the service mongo-svc is bound to the port 27017 of the mongo pod attached to it.
 
 kubectl get svc mongo
-curl IP:27017 to see if you can access
+>> minikube ssh
+$$ curl IP:27017 to see if you can access
+Result
+It looks like you are trying to access MongoDB over HTTP on the native driver port.
 
+Source
 https://levelup.gitconnected.com/deploy-your-first-flask-mongodb-app-on-kubernetes-8f5a33fa43b4

@@ -10,5 +10,5 @@ RUN mkdir /app/input
 RUN pip install --upgrade pip
 
 RUN pip install pymongo
-#ENTRYPOINT ["/docker-entrypoint.sh"]
+
 CMD ["python", "/app/ingest_mongodb_docker.py"]
