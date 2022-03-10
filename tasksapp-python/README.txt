@@ -34,19 +34,49 @@ $$ curl IP:27017 to see if you can access
 Result
 It looks like you are trying to access MongoDB over HTTP on the native driver port.
 
->>curl 10.107.107.36:8080/audio
-curl 10.96.21.73:8080
+>>curl 10.107.107.36:8080/tasks
+curl 10.96.21.73:8080/tasks
+curl 10.96.21.73:8080/audio
 >>
 curl -X POST -d "{\"audio_files\": \"File 1\"}" 10.107.107.36:8080/audio_file
 curl -X POST -d "{\"task\": \"Task 3\"}" http://10.96.21.73:8080/task
-curl -X POST -d "{\"audiofile\": \"File 2\"}" http://10.96.21.73:8080/audiofile
+curl -X POST -d "{\"audiofile\": \"File 3\"}" http://10.96.21.73:8080/audiofile
 
-curl -X POST -d "{\"audiofile\": \"File 1\"}" http://10.96.21.73:8080/audiofile
+curl -X POST -d "{\"task\": \"File 2\"}" http://10.96.21.73:8080/task
 
-kubectl port-forward svc/mongo 27017:27017
+kubectl port-forward mongopodxxx 27017
 
- kubectl exec -it mongo-5cc97976c-bv6kg /bin/bash
+https://www.mongodb.com/try/download/shell download mongosh
+
+kubectl exec -it mongo-5cc97976c-bv6kg /bin/bash
+#mongo
+
 mongo --port 27018 --username XXXX --password XXXX
+
+Let’s try and access the database from outside the cluster. In order to do so, we must create another Kubernetes Service.
+kubectl create -f mongodb-nodeport-svc.yaml
+
+To connect from outside the Kubernetes cluster, you must use the Kubernetes cluster’s worker node IP address or a load balancer address. In case you are following on Minikube, you can use minikube’s IP to connect.
+To see minikube IP or service URLs, use the following commands
+minikube ip
+
+192.168.49.2
+
+minikube service --url mongo-nodeport-svc
+
+Command to conenct
+kubectl exec -it mongo-5cc97976c-bv6kg /bin/bash
+
+mongo --host 192.168.49.2 --port 27017 -u adminuser -p password123
+
+kubectl apply -f mongo-client.yaml
+kubectl exec deployment/mongo-client -it -- /bin/bash
+mongo --host mongo-nodeport-svc --port 27017 
+show dbs
+use dev
+show collections
+db.task.find()
+
 
 Source
 https://levelup.gitconnected.com/deploy-your-first-flask-mongodb-app-on-kubernetes-8f5a33fa43b4

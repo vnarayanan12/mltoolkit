@@ -7,8 +7,10 @@ Created on Thu Feb 24 15:43:39 2022
 
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
+from bson.objectid import ObjectId
 
 import socket
+import os
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://mongo:27017/dev"
 mongo = PyMongo(app)
@@ -34,28 +36,46 @@ def get_all_audio_files():
     return jsonify(
         data=data
     )
-@app.route("/audio_files", methods=["POST"])
-def create_file(data):
+  
+
+@app.route("/audio_file", methods=["POST"])
+def create_files():
+   
+    # print ("DB URL.. ", dbUrl)
+    
     data = request.get_json(force=True)
-    db.audio_files.insert_one(data)
+    db.audio_files.insert_one({"audio_files": data["audio_files"]})
+    #db.audio_files.insert_one(data)
     return jsonify(
         message="Task saved successfully!"
     )
 
-
-def getFileandIngestIntoDB(inputFile, path):
-   
-    print ("Input File.. ", inputFile)
-    # print ("DB URL.. ", dbUrl)
-    
-    #data = request.get_json(force=True)
-    mydict = { "fileName": inputFile , "filePath": path}
-    create_file(mydict)
+@app.route("/task", methods=["POST"])
+def create_task():
+    data = request.get_json(force=True)
+    db.task.insert_one({"task": data["task"]})
     return jsonify(
-        message="File saved successfully!"
+        message="Task saved successfully!"
     )
-    print ("Done")
-  
+
+@app.route("/update_file/<id>", methods=["PUT"])
+def update_file(id):
+    data = request.get_json(force=True)["filePath"]
+    response = db.audo_files.update_one({"_id": ObjectId(id)}, {"$set": {"filePath": data}})
+    if response.matched_count:
+        message = "File Path updated successfully!"
+    else:
+        message = "No File found!"
+    return jsonify(
+        message=message
+    ) 
+
+@app.route("/audio_files/delete", methods=["POST"])
+def delete_all_files():
+    db.task.remove()
+    return jsonify(
+        message="All Files deleted!"
+    )
   
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
