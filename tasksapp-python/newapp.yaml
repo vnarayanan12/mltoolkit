@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: newapp-svc
+spec:
+  selector:
+    app: newapp
+  ports:
+    - port: 8080
+      targetPort: 5000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: newapp
+  labels:
+    app: newapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: newapp
+  template:
+    metadata:
+      labels:
+        app: newapp
+    spec:
+      containers:
+        - name: newapp
+          image: vnarayanan/webapp:1.0.0
+          ports:
+            - containerPort: 5000
+          imagePullPolicy: Always
