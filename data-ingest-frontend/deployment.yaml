@@ -2,7 +2,7 @@
 apiVersion: apps/v1 # Kubernetes API version
 kind: Deployment  # Kubernetes resource kind we are creating
 metadata:
-  name: data-ingest-frontend
+  name: data-ingest-frontend-deployment
   namespace: ml-toolkit
 spec:
   selector:
