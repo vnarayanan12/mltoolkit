@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -8,7 +9,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './mat.module';
 
-import { TestService } from '../apis/test/api/test.service'
+import { DatasetService } from '../apis/test/api/dataset.service'
 
 
 @NgModule({
@@ -20,10 +21,11 @@ import { TestService } from '../apis/test/api/test.service'
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     MaterialModule
   ],
   providers: [
-    TestService
+    DatasetService
   ],
   bootstrap: [AppComponent]
 })

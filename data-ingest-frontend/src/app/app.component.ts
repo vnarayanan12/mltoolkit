@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { TestService } from '../apis/test/api/test.service'
+import { FormControl } from '@angular/forms';
+import { DatasetService } from '../apis/test/api/dataset.service'
 
 @Component({
   selector: 'app-root',
@@ -9,12 +10,22 @@ import { TestService } from '../apis/test/api/test.service'
 export class AppComponent {
   title = 'data-ingest-frontend';
 
+  path = new FormControl('');
+
+  filenames = [];
+
+  datasetName = '';
+
   constructor(
-    private testApi: TestService
+    private testApi: DatasetService
   ) {}
 
-  postId() {
-    this.testApi.postId({id: 2}).subscribe(
+  postDataSet() {
+    
+  }
+
+  getFilepaths() {
+    this.testApi.getFilepaths().subscribe(
       rtv => {
         console.log(rtv);
       },
@@ -24,15 +35,8 @@ export class AppComponent {
     )
   }
 
-  getId() {
-    this.testApi.getId(2).subscribe(
-      rtv => {
-        console.log(rtv);
-      },
-      err => {
-        console.log(err);
-      }
-    )
+  getDataSetFromDB() {
+
   }
 
 }

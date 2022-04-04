@@ -13,7 +13,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "127.0.0.1",
+  "host": "ml-toolkit.com",
   "basePath": "/api",
   "tags": [
     {
@@ -26,14 +26,14 @@
     "http"
   ],
   "paths": {
-    "/test": {
+    "/dataset": {
       "post": {
         "tags": [
-          "test"
+          "dataset"
         ],
-        "summary": "Pass id",
+        "summary": "Post dataset to db",
         "description": "",
-        "operationId": "postId",
+        "operationId": "postDataset",
         "consumes": [
           "application/json"
         ],
@@ -43,11 +43,11 @@
         "parameters": [
           {
             "in": "body",
-            "name": "body",
-            "description": "Id passed in",
+            "name": "dataset",
+            "description": "Pathnames passed in",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Id"
+              "$ref": "#/definitions/Dataset"
             }
           }
         ],
@@ -56,86 +56,85 @@
             "description": "Invalid input"
           }
         }
-      }
-    },
-    "/test/{id}": {
+      },
       "get": {
         "tags": [
-          "test"
+          "dataset"
         ],
-        "summary": "Return Id ID",
+        "summary": "Get dataset from disk",
         "description": "",
-        "operationId": "getId",
+        "operationId": "getFilepaths",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Filepaths"
+            }
+          },
+          "404": {
+            "description": "Data not found"
+          }
+        }
+      }
+    },
+    "/dataset/{name}": {
+      "get": {
+        "tags": [
+          "dataset"
+        ],
+        "summary": "Get dataset from db",
+        "description": "",
+        "operationId": "getDataset",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "id",
             "in": "path",
-            "description": "Id to return",
+            "name": "name",
+            "description": "name of dataset",
             "required": true,
-            "type": "integer",
-            "format": "int64"
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/Id"
+              "$ref": "#/definitions/Dataset"
             }
           },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
           "404": {
-            "description": "Id not found"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "test"
-        ],
-        "summary": "Updates a pet in the store with form data",
-        "description": "",
-        "operationId": "updatePetWithForm",
-        "consumes": [
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID  that needs to be updated",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
+            "description": "Data not found"
           }
         }
       }
     }
   },
   "definitions": {
-    "Id": {
+    "Filepaths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "Dataset": {
       "type": "object",
-      "required": [
-        "id"
-      ],
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
+        "name": {
+          "type": "string"
+        },
+        "filepaths": {
+          "$ref": "#/definitions/Filepaths"
         }
       }
     }

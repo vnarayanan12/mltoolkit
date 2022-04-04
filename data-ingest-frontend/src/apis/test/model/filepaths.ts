@@ -11,6 +11,5 @@
  */
 
 
-export interface Id { 
-    id: number;
+export interface Filepaths extends Array<string> { 
 }

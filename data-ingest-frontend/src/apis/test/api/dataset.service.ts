@@ -18,14 +18,15 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { Id } from '../model/id';
+import { Dataset } from '../model/dataset';
+import { Filepaths } from '../model/filepaths';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
-export class TestService {
+export class DatasetService {
 
     protected basePath = 'http://ml-toolkit.com/api';
     public defaultHeaders = new HttpHeaders();
@@ -57,19 +58,19 @@ export class TestService {
 
 
     /**
-     * Return Id ID
+     * Get dataset from db
      * 
-     * @param id Id to return
+     * @param name name of dataset
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getId(id: number, observe?: 'body', reportProgress?: boolean): Observable<Id>;
-    public getId(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Id>>;
-    public getId(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Id>>;
-    public getId(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getDataset(name: string, observe?: 'body', reportProgress?: boolean): Observable<Dataset>;
+    public getDataset(name: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Dataset>>;
+    public getDataset(name: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Dataset>>;
+    public getDataset(name: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getId.');
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling getDataset.');
         }
 
         let headers = this.defaultHeaders;
@@ -85,9 +86,10 @@ export class TestService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
+            'application/json'
         ];
 
-        return this.httpClient.get<Id>(`${this.basePath}/test/${encodeURIComponent(String(id))}`,
+        return this.httpClient.get<Dataset>(`${this.basePath}/dataset/${encodeURIComponent(String(name))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -98,19 +100,56 @@ export class TestService {
     }
 
     /**
-     * Pass id
+     * Get dataset from disk
      * 
-     * @param body Id passed in
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public postId(body: Id, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public postId(body: Id, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public postId(body: Id, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public postId(body: Id, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getFilepaths(observe?: 'body', reportProgress?: boolean): Observable<Filepaths>;
+    public getFilepaths(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Filepaths>>;
+    public getFilepaths(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Filepaths>>;
+    public getFilepaths(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling postId.');
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Filepaths>(`${this.basePath}/dataset`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Post dataset to db
+     * 
+     * @param dataset Pathnames passed in
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public postDataset(dataset: Dataset, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public postDataset(dataset: Dataset, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public postDataset(dataset: Dataset, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public postDataset(dataset: Dataset, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (dataset === null || dataset === undefined) {
+            throw new Error('Required parameter dataset was null or undefined when calling postDataset.');
         }
 
         let headers = this.defaultHeaders;
@@ -133,52 +172,8 @@ export class TestService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<any>(`${this.basePath}/test`,
-            body,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Updates a pet in the store with form data
-     * 
-     * @param id ID  that needs to be updated
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updatePetWithForm(id: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updatePetWithForm(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updatePetWithForm(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updatePetWithForm(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling updatePetWithForm.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/xml',
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/x-www-form-urlencoded'
-        ];
-
-        return this.httpClient.post<any>(`${this.basePath}/test/${encodeURIComponent(String(id))}`,
-            null,
+        return this.httpClient.post<any>(`${this.basePath}/dataset`,
+            dataset,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

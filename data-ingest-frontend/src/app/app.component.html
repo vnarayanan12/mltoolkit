@@ -4,6 +4,9 @@
   <span class="spacer"></span>
 </mat-toolbar>
 <div class="content">
-  <button mat-raised-button color="primary" (click)="postId()">Post Id</button>
-  <button mat-raised-button color="primary" (click)="getId()">Get Id</button>
+  <label for="path">Path: </label>
+  <input id="path" type="text" [formControl]="path" style="margin-inline: 5px;">
+  <button mat-raised-button color="primary" (click)="getFilepaths()" style="margin-inline: 5px;">Select Data</button>
+  <button mat-raised-button color="primary" (click)="postDataSet()" style="margin-inline: 5px;">Post</button>
+  <button mat-raised-button color="primary" (click)="getDataSetFromDB()" style="margin-inline: 5px;">Retrieve</button>
 </div>
